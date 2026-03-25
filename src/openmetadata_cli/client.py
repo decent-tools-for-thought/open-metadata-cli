@@ -64,9 +64,13 @@ class OpenMetadataClient:
     def health(self) -> Any:
         return self.request("GET", "/users", params={"limit": 1})
 
-    def get_user_by_name(self, name: str, fields: str | None = None, include: str = "non-deleted") -> Any:
+    def get_user_by_name(
+        self, name: str, fields: str | None = None, include: str = "non-deleted"
+    ) -> Any:
         encoded = urllib.parse.quote(name, safe="")
-        return self.request("GET", f"/users/name/{encoded}", params={"fields": fields, "include": include})
+        return self.request(
+            "GET", f"/users/name/{encoded}", params={"fields": fields, "include": include}
+        )
 
     def list_entities(self, entity_path: str, **params: Any) -> Any:
         return self.request("GET", entity_path, params=params)

@@ -1,23 +1,30 @@
-pkgname=openmetadata-cli
+pkgname=open-metadata-cli
 pkgver=0.1.0
 pkgrel=1
-pkgdesc='Command-line client for OpenMetadata'
+pkgdesc='Command-line client for OpenMetadata with local profile storage'
 arch=('any')
-url='https://docs.open-metadata.org/'
+url='https://github.com/decent-tools-for-thought/open-metadata-cli'
 license=('MIT')
 depends=('python')
-makedepends=('python-build' 'python-installer' 'python-setuptools' 'python-wheel')
+makedepends=('python-build' 'python-installer' 'python-setuptools')
+checkdepends=('python-pytest')
 source=()
 sha256sums=()
 
 build() {
   cd "$startdir"
-  python -m build --wheel --no-isolation
+  rm -rf "$srcdir/dist"
+  python -m build --wheel --no-isolation --outdir "$srcdir/dist"
+}
+
+check() {
+  cd "$startdir"
+  PYTHONPATH=src pytest
 }
 
 package() {
   cd "$startdir"
-  python -m installer --destdir="$pkgdir" dist/*.whl
+  python -m installer --destdir="$pkgdir" "$srcdir"/dist/*.whl
   install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
   install -Dm644 README.md "$pkgdir/usr/share/doc/$pkgname/README.md"
 }

@@ -3,15 +3,15 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "openmetadata-cli"
+name = "open-metadata-cli"
 version = "0.1.0"
-description = "Command-line client for OpenMetadata"
+description = "Command-line client for OpenMetadata with local profile storage"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 license = "MIT"
 license-files = ["LICENSE"]
 authors = [
-  { name = "OpenCode" }
+  { name = "OpenCode" },
 ]
 keywords = ["openmetadata", "cli", "metadata"]
 classifiers = [
@@ -19,17 +19,55 @@ classifiers = [
   "Environment :: Console",
   "Intended Audience :: Developers",
   "Programming Language :: Python :: 3",
-  "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
-  "Topic :: Utilities"
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Topic :: Database",
+  "Topic :: Utilities",
+]
+
+[project.urls]
+Homepage = "https://github.com/decent-tools-for-thought/open-metadata-cli"
+Repository = "https://github.com/decent-tools-for-thought/open-metadata-cli"
+Issues = "https://github.com/decent-tools-for-thought/open-metadata-cli/issues"
+Documentation = "https://docs.open-metadata.org/latest/main-concepts/metadata-standard/apis"
+
+[dependency-groups]
+dev = [
+  "build>=1.2.2",
+  "mypy>=1.18.2",
+  "pytest>=8.4.2",
+  "ruff>=0.13.3",
 ]
 
 [project.scripts]
 omctl = "openmetadata_cli.cli:main"
 
 [tool.setuptools]
-package-dir = {"" = "src"}
+package-dir = { "" = "src" }
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
+
+[tool.mypy]
+python_version = "3.11"
+files = ["src/openmetadata_cli", "tests"]
+strict = true
+
+[[tool.mypy.overrides]]
+module = ["tests.*"]
+disallow_untyped_defs = false

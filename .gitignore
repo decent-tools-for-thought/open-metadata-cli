@@ -4,6 +4,12 @@ build/
 dist/
 src/*.egg-info/
 *.pyc
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.venv/
+.uv-cache/
+.uv-python/
 pkg/
 *.pkg.tar.zst
 *.pkg.tar.xz

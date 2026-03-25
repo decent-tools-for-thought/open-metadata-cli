@@ -6,7 +6,6 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-
 APP_DIR = Path.home() / ".config" / "openmetadata-cli"
 CONFIG_PATH = APP_DIR / "config.json"
 

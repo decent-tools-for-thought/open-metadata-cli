@@ -1,0 +1,14 @@
+pkgbase = open-metadata-cli
+	pkgdesc = Command-line client for OpenMetadata with local profile storage
+	pkgver = 0.1.0
+	pkgrel = 1
+	url = https://github.com/decent-tools-for-thought/open-metadata-cli
+	arch = any
+	license = MIT
+	checkdepends = python-pytest
+	makedepends = python-build
+	makedepends = python-installer
+	makedepends = python-setuptools
+	depends = python
+
+pkgname = open-metadata-cli

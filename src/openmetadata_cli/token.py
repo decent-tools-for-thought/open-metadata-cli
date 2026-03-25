@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import base64
 import json
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 
 
@@ -29,4 +29,4 @@ def format_expiry(value: Any) -> str:
         timestamp = int(value)
     except (TypeError, ValueError):
         return str(value)
-    return datetime.fromtimestamp(timestamp, tz=timezone.utc).isoformat()
+    return datetime.fromtimestamp(timestamp, tz=UTC).isoformat()

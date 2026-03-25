@@ -6,6 +6,7 @@ import os
 import sys
 from typing import Any
 
+from . import __version__
 from .client import OpenMetadataClient, OpenMetadataError
 from .config import (
     config_path,
@@ -17,9 +18,7 @@ from .config import (
     use_profile,
 )
 from .formatting import print_json, print_table
-from . import __version__
 from .token import decode_token, format_expiry
-
 
 ENTITY_MAP = {
     "table": "/tables",
@@ -49,7 +48,9 @@ def build_parser() -> argparse.ArgumentParser:
 
     login = subparsers.add_parser("login", help="Store a host and token in a profile")
     login.add_argument("--host", required=True, help="OpenMetadata host, with or without /api")
-    login.add_argument("--token", help="JWT token. If omitted, read from prompt or OPENMETADATA_JWT_TOKEN")
+    login.add_argument(
+        "--token", help="JWT token. If omitted, read from prompt or OPENMETADATA_JWT_TOKEN"
+    )
     login.add_argument("--profile", dest="login_profile", default="default", help="Profile name")
     login.add_argument("--no-verify", action="store_true", help="Skip credential verification")
     login.set_defaults(func=cmd_login)
@@ -90,7 +91,9 @@ def build_parser() -> argparse.ArgumentParser:
     entity_list.add_argument("--limit", type=int, default=10)
     entity_list.add_argument("--fields", help="Comma-separated field names")
     entity_list.add_argument("--include", default="non-deleted")
-    entity_list.add_argument("--filter", action="append", default=[], help="Extra query param in key=value form")
+    entity_list.add_argument(
+        "--filter", action="append", default=[], help="Extra query param in key=value form"
+    )
     entity_list.set_defaults(func=cmd_entity_list)
     entity_get = entity_sub.add_parser("get", help="Get an entity by fully qualified name")
     entity_get.add_argument("kind", choices=sorted(ENTITY_MAP))
@@ -145,7 +148,12 @@ def resolve_client(args: argparse.Namespace) -> OpenMetadataClient:
     return OpenMetadataClient(host=profile.host, token=profile.token)
 
 
-def emit(args: argparse.Namespace, data: Any, rows: list[dict[str, Any]] | None = None, columns: list[str] | None = None) -> None:
+def emit(
+    args: argparse.Namespace,
+    data: Any,
+    rows: list[dict[str, Any]] | None = None,
+    columns: list[str] | None = None,
+) -> None:
     if args.json or rows is None or columns is None:
         print_json(data)
     else:
@@ -168,7 +176,9 @@ def cmd_login(args: argparse.Namespace) -> int:
 def cmd_profiles_list(args: argparse.Namespace) -> int:
     current = get_current_profile_name()
     rows = [{"name": name, "current": "*" if name == current else ""} for name in list_profiles()]
-    emit(args, {"current_profile": current, "profiles": rows}, rows=rows, columns=["current", "name"])
+    emit(
+        args, {"current_profile": current, "profiles": rows}, rows=rows, columns=["current", "name"]
+    )
     return 0
 
 
@@ -188,7 +198,12 @@ def cmd_auth_status(args: argparse.Namespace) -> int:
     client = resolve_client(args)
     data = client.health()
     rows = [{"status": "ok", "host": client.host, "visibleResults": len(data.get("data", []))}]
-    emit(args, {"status": "ok", "host": client.host, "response": data}, rows=rows, columns=["status", "host", "visibleResults"])
+    emit(
+        args,
+        {"status": "ok", "host": client.host, "response": data},
+        rows=rows,
+        columns=["status", "host", "visibleResults"],
+    )
     return 0
 
 
@@ -209,7 +224,9 @@ def cmd_whoami(args: argparse.Namespace) -> int:
     }
     if subject:
         try:
-            result["user"] = client.get_user_by_name(subject, fields="teams,roles,personas,domains", include="all")
+            result["user"] = client.get_user_by_name(
+                subject, fields="teams,roles,personas,domains", include="all"
+            )
         except OpenMetadataError as exc:
             result["userLookupError"] = str(exc)
     row = {
@@ -219,7 +236,12 @@ def cmd_whoami(args: argparse.Namespace) -> int:
         "isBot": claims.get("isBot", ""),
         "expiresAt": format_expiry(claims.get("exp")),
     }
-    emit(args, result, rows=[row], columns=["subject", "email", "tokenType", "isBot", "expiresAt"])
+    emit(
+        args,
+        result,
+        rows=[row],
+        columns=["subject", "email", "tokenType", "isBot", "expiresAt"],
+    )
     return 0
 
 
@@ -273,7 +295,12 @@ def cmd_entity_list(args: argparse.Namespace) -> int:
 
 def cmd_entity_get(args: argparse.Namespace) -> int:
     client = resolve_client(args)
-    data = client.get_entity_by_name(ENTITY_MAP[args.kind], args.name, fields=args.fields, include=args.include)
+    data = client.get_entity_by_name(
+        ENTITY_MAP[args.kind],
+        args.name,
+        fields=args.fields,
+        include=args.include,
+    )
     emit(args, data)
     return 0
 
@@ -303,7 +330,12 @@ def cmd_table_list(args: argparse.Namespace) -> int:
 
 def cmd_table_get(args: argparse.Namespace) -> int:
     client = resolve_client(args)
-    data = client.get_entity_by_name("/tables", args.name, fields=args.fields, include=args.include)
+    data = client.get_entity_by_name(
+        "/tables",
+        args.name,
+        fields=args.fields,
+        include=args.include,
+    )
     emit(args, data)
     return 0
 
