@@ -1,0 +1,12 @@
+__pycache__/
+*.egg-info/
+build/
+dist/
+src/*.egg-info/
+*.pyc
+pkg/
+*.pkg.tar.zst
+*.pkg.tar.xz
+*.tar.gz
+/openmetadata-cli/
+/src/openmetadata-cli/
