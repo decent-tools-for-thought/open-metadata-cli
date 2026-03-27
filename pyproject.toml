@@ -7,7 +7,7 @@ name = "open-metadata-cli"
 version = "0.1.0"
 description = "Command-line client for OpenMetadata with local profile storage"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.13"
 license = "MIT"
 license-files = ["LICENSE"]
 authors = [
@@ -55,7 +55,7 @@ testpaths = ["tests"]
 
 [tool.ruff]
 line-length = 100
-target-version = "py311"
+target-version = "py313"
 
 [tool.ruff.format]
 quote-style = "double"
@@ -64,7 +64,7 @@ quote-style = "double"
 select = ["E", "F", "I", "UP"]
 
 [tool.mypy]
-python_version = "3.11"
+python_version = "3.13"
 files = ["src/openmetadata_cli", "tests"]
 strict = true
 

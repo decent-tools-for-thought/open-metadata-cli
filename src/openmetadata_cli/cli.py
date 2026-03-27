@@ -4,7 +4,8 @@ import argparse
 import getpass
 import os
 import sys
-from typing import Any
+from collections.abc import Callable
+from typing import Any, cast
 
 from . import __version__
 from .client import OpenMetadataClient, OpenMetadataError
@@ -352,7 +353,8 @@ def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
     try:
-        return args.func(args)
+        handler = cast(Callable[[argparse.Namespace], int], args.func)
+        return handler(args)
     except (ValueError, OpenMetadataError) as exc:
         print(f"Error: {exc}", file=sys.stderr)
         return 1

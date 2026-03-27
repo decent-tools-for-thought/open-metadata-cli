@@ -19,6 +19,8 @@ def decode_token(token: str) -> dict[str, Any]:
         payload = json.loads(_b64decode(parts[1]).decode("utf-8"))
     except (ValueError, json.JSONDecodeError) as exc:
         raise ValueError("Token payload is not decodable JSON.") from exc
+    if not isinstance(payload, dict):
+        raise ValueError("Token payload must decode to a JSON object.")
     return payload
 
 

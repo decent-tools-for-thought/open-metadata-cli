@@ -3,10 +3,12 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pytest
+
 import openmetadata_cli.config as config
 
 
-def test_save_and_load_profile(tmp_path: Path, monkeypatch) -> None:
+def test_save_and_load_profile(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     app_dir = tmp_path / "cfg"
     config_path = app_dir / "config.json"
     monkeypatch.setattr(config, "APP_DIR", app_dir)
@@ -25,7 +27,9 @@ def test_save_and_load_profile(tmp_path: Path, monkeypatch) -> None:
     assert stored["profiles"]["work"]["token"] == "token"
 
 
-def test_delete_profile_updates_current_profile(tmp_path: Path, monkeypatch) -> None:
+def test_delete_profile_updates_current_profile(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     app_dir = tmp_path / "cfg"
     config_path = app_dir / "config.json"
     monkeypatch.setattr(config, "APP_DIR", app_dir)

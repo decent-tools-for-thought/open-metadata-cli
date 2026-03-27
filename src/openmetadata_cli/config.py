@@ -34,7 +34,10 @@ def load_config() -> dict[str, Any]:
     if not CONFIG_PATH.exists():
         return _default_config()
     with CONFIG_PATH.open("r", encoding="utf-8") as handle:
-        return json.load(handle)
+        data = json.load(handle)
+    if not isinstance(data, dict):
+        raise ValueError("Config file must contain a JSON object.")
+    return data
 
 
 def save_config(data: dict[str, Any]) -> None:
